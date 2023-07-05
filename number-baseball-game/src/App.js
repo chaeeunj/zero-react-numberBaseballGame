@@ -18,8 +18,33 @@ function App() {
 
   const handleSubmit = () => {
     // 스트라이크, 볼, 정답 유무 확인
-
     const answers = answer.split('').map((item) => Number(item));
+
+    if (answers.some((number) => isNaN(number))) {
+      alert('숫자만 입력해주세요');
+      return;
+    }
+
+    if (answers.length !== 4) {
+      alert('4자리 숫자만 입력해주세요');
+      return;
+    }
+
+    const isDuplicate = answers.some((number) => {
+      // [1, 2, 3, 4]
+      // -> 앞에서부터 탐색하면 index = 0
+      // <- 뒤에서부터 탐색해도 index = 0
+      // [1, 1, 2, 4]
+      // -> 앞에서 탐색하면 index = 0
+      // <- 뒤에서부터 탐색하면 index = 1
+
+      return answers.indexOf(number) !== answers.lastIndexOf(number);
+    });
+
+    if (isDuplicate) {
+      alert('입력 값에 중복이 있습니다.');
+      return;
+    }
 
     const { strike, ball } = randomNumber.reduce(
       (prev, cur, index) => {
